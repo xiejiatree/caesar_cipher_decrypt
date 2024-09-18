@@ -64,6 +64,7 @@ public class Solution{
 luiuimul uful bpzcgcbv cz munplu. zwyz syt tzlybvu tcbgu cz syt pmfcpxt zwu nkytwcbv kcvwz
 wye muub zwulu npl ruylt. bps twu spbeulue wps twu icttue cz npl zwyz yipxbz pn zciu ybe swyz
 pzwul zwcbvt cb wul tiykk zpsb twu wye nyckue zp bpzcgu.";
+// string text = @"abcdefghijklmnopqrstuvwxyz";
         Dictionary<char, int> table = freqAnalysis(text);
         printDict(table);
         while(true){
@@ -82,23 +83,26 @@ public static string decrypt(string cipherText, char key, char key2)
 {
     StringBuilder decrypt = new StringBuilder();
     int index;
-    // Calculate the decryption shift value using modulo 26 (assuming alphabet size)
-    if(sub_cipher.GetValueOrDefault(key)>sub_cipher.GetValueOrDefault(key2)){
-        //What is the forward shift? Now 25->4, what about 0 - 21 though? -21 mod 25
-        index = (sub_cipher.GetValueOrDefault(key) - sub_cipher.GetValueOrDefault(key2)) % 26;
-    }
-    else{
-        index = sub_cipher.GetValueOrDefault(key)+(sub_cipher.GetValueOrDefault(key2) - sub_cipher.GetValueOrDefault(key))% 26;
-    }
-    //What if we were mapping e->f, or 4->5?
+    //Calculate the decryption shift value using modulo 26 (assuming alphabet size)
+    //What if we were mapping e->f, or 4->5
 
+    //Tell me about keys. b->a
+    //Moving back 1 is the same as moving up 25.
+    if(sub_cipher.GetValueOrDefault(key)>sub_cipher.GetValueOrDefault(key2)){
+        index = (sub_cipher.GetValueOrDefault(key2) + (26-sub_cipher.GetValueOrDefault(key)));
+    }
+    //Tell me about keys. a->b
+    else{
+        index = sub_cipher.GetValueOrDefault(key2)-sub_cipher.GetValueOrDefault(key);
+    }
 
     foreach (char chara in cipherText)
     {
         if (Char.IsLetter(chara))
-        {   
+        { 
             // Get the decrypted character using modular arithmetic
-            char newChara = modular_arithmetic.GetValueOrDefault((sub_cipher.GetValueOrDefault(key)+index)%26);
+            int keyIndex = sub_cipher.GetValueOrDefault(chara);
+            char newChara = modular_arithmetic.GetValueOrDefault((keyIndex+index)%26);
             decrypt.Append(newChara);
         }
         else
